@@ -13,7 +13,7 @@ INSERT INTO employees(emp_id,name,department,salary,joining_date) VALUES
 (2204,"Neha Sharma","IT",65000,'2021-1-18'),
 (2205,"Preethi Singh","MARKETING",45000,'2024-9-14');
 show tables;
-+
+
 CREATE TABLE department(dept_id INT PRIMARY KEY, dept_name VARCHAR(40), 
 location VARCHAR(40));
  INSERT INTO department(dept_id,dept_name,location) VALUES
@@ -39,7 +39,7 @@ SELECT * from employees order by salary desc limit 3;
 SELECT * from employees order by salary limit 1 offset 3;
 
 UPDATE employees 
-SET salary = salary * 1.10
+SET salary = salary * 1.10 
 WHERE department = 'IT';
 
 delete from employees 
