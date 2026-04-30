@@ -38,7 +38,7 @@ SELECT * from employees order by salary desc limit 3;
 
 SELECT * from employees order by salary limit 1 offset 3;
 
-UPDATE employees 
+ UPDATE employees 
 SET salary = salary * 1.10 
 WHERE department = 'IT';
 

@@ -169,8 +169,8 @@ select datediff('2024-03-23','2024-03-19');
 
 
 # Formatting dates & time:
-select date_format(curdate(), '%d-%m-%y');
-select time_format(curtime(), '%h:%i:%s %p');
+select date_format(curdate(), '%d-%M-%Y');
+select time_format(curtime(), '%H:%i:%s %p');
 
 
 # Extract parts of date:
@@ -178,7 +178,7 @@ select month('2026-04-01');
 select day('2026-04-01');
 
 
-select dayname('2026-04-27'+ interval 10 day);
+select dayname('2026-04-27'+interval 10 day);
 select CAST('2026-03-21' AS DATE);
 
 
@@ -207,3 +207,34 @@ select * from employees
 where first_name regexp '[^rav]';
 
 select coalesce(commission, 0) from employees;
+
+
+#					CONSTRAINTS
+
+# 	Definition:
+#   A constraint is a restriction placed on a column or table to 
+#enforce data integrity.
+
+# 1.NOT NULL
+#       Ensures a column cannot have NULL (empty) values.
+
+# 2.UNIQUE
+#       Ensures all values in a column are different.
+
+# 3. DEFAULT
+#       Assigns a default value if none is provided.
+
+# 4. CHECK
+#		Ensures values satisfy a specific condition.
+
+# 5. PRIMARY KEY
+#		Uniquely identifies each record.
+#		Combination of NOT NULL + UNIQUE
+
+# 6. FORIEGN KEY
+#		Links one table to another.
+#		Maintains referential integrity.
+
+
+
+
