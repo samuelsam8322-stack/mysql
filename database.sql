@@ -237,4 +237,185 @@ select coalesce(commission, 0) from employees;
 
 
 
+#					JOINs
+# WHAT IS JOINs?
+#		JOINs are used to combine data from two or more tables based on a related 
+# column (usually a key).
 
+#Types of JOINs:
+
+-- 1. INNER JOIN
+-- Returns only matching records from both tables
+--     Common data only
+--     
+-- 2. LEFT JOIN (LEFT OUTER JOIN)
+-- Returns all records from left table + matching from right
+--    Unmatched right values → NULL
+
+-- 3. RIGHT JOIN (RIGHT OUTER JOIN)
+-- Returns all records from right table + matching from left
+
+-- 4. FULL JOIN (FULL OUTER JOIN)
+-- Returns all records from both tables
+--    Unmatched values → NULL
+
+
+create database joins;
+use joins;
+
+create table employee_s (emp_id int, name varchar(25), dept_id int);
+insert into employee_s values
+(1,'Alice', 101),
+(2,'Bob',104),
+(3,'Charlie',102),
+(4,'Dev',103),
+(5,'Rahul',103);
+
+create table dept_ment (dept_id int, dept_name varchar(10));
+insert into dept_ment values
+(101, 'HR'),(102,'FINANCE'),(103,'IT'),(104,'MARKETING'),(105,'SALES');
+
+select * from employee_s;
+select * from dept_ment;
+drop table dept_ment;
+drop table employee_s;
+
+-- 1. INNER JOIN:
+--  Returns only matching records
+SELECT e.name, d.dept_name
+FROM employee_s e
+INNER JOIN dept_ment d
+ON e.dept_id = d.dept_id;
+
+
+-- 2. LEFT JOIN:
+--    All records from left table + matching from right
+SELECT e.name, d.dept_name
+FROM employee_s e
+LEFT JOIN dept_ment d
+ON e.dept_id = d.dept_id;
+
+
+-- 3. RIGHT JOIN:
+--   All records from right table + matching from left
+SELECT e.name, d.dept_name
+FROM employee_s e
+RIGHT JOIN dept_ment d
+ON e.dept_id = d.dept_id;
+
+
+-- 4. FULL JOIN (FULL OUTER JOIN):
+--   All records from both tables
+SELECT e.name, d.dept_name
+FROM employee_s e
+LEFT JOIN dept_ment d
+ON e.dept_id = d.dept_id
+
+UNION
+
+SELECT e.name, d.dept_name
+FROM employee_s e
+RIGHT JOIN dept_ment d
+ON e.dept_id = d.dept_id;
+
+# 						SUB QUERY
+#		 A Subquery is a query nested inside another query
+# (inside SELECT, FROM, WHERE).
+
+# TYPES:
+
+-- Single-row subquery -  returns one value
+-- Multi-row subquery  →  returns multiple values (IN, ANY, ALL)
+-- Correlated subquery →  depends on outer query (runs repeatedly)
+
+
+# 1.Subquery in SELECT Clause
+# Display employee name with department average salary:
+
+SELECT emp_name,
+       (SELECT AVG(salary)
+        FROM Employees e2
+        WHERE e2.dept_id = e1.dept_id) AS dept_avg_salary
+FROM Employees e1;
+
+
+# 2.Subquery in FROM Clause (Derived Table)
+# Find average salary of each department:
+
+SELECT dept_id, avg_salary
+FROM (
+    SELECT dept_id, AVG(salary) AS avg_salary
+    FROM Employees
+    GROUP BY dept_id
+) AS dept_avg;
+
+
+#3. Single-Row Subquery (in WHERE)
+#Find employees earning more than the average salary:
+
+SELECT emp_name, salary
+FROM Employees
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employees
+);
+
+
+# 4.Subquery with IN (Multiple Rows)
+#Find employees working in departments located in 'Chennai':
+
+SELECT emp_name
+FROM Employees
+WHERE dept_id IN (
+    SELECT dept_id
+    FROM Departments
+    WHERE location = 'Chennai'
+);
+
+
+# 5.Subquery with ANY
+# Find employees earning more than any employee in department 10:
+
+SELECT emp_name
+FROM Employees
+WHERE salary > ANY (
+    SELECT salary
+    FROM Employees
+    WHERE dept_id = 10
+);
+
+
+# 6.Subquery with ALL
+#Find employees earning more than all employees in department 10:
+
+SELECT emp_name
+FROM Employees
+WHERE salary > ALL (
+    SELECT salary
+    FROM Employees
+    WHERE dept_id = 10
+);
+
+
+# 7.Subquery with EXISTS
+# Find employees who have at least one record in the Projects table:
+
+SELECT emp_name
+FROM Employees e
+WHERE EXISTS (
+    SELECT 1
+    FROM Projects p
+    WHERE e.emp_id = p.emp_id
+);
+
+
+# 8.Correlated Subquery
+# Find employees earning more than their department average:
+
+SELECT emp_name, salary
+FROM Employees e1
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employees e2
+    WHERE e1.dept_id = e2.dept_id
+);
