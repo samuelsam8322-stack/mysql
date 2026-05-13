@@ -25,11 +25,11 @@ rename column name to f_name;
 
 desc student;
 
-alter table student    # (ALTER COLUMN)
+alter table student    			# (ALTER COLUMN)
 modify column city varchar(50);
 
 
-update student			#(CHANGE OR MODIFY ROWS)
+update student					#(CHANGE OR MODIFY ROWS)
 set age = 18
 where s_no = 3;
 
@@ -46,7 +46,7 @@ delete from student;
 select * from employees
 where salary >60000;
 
-#ctas
+#									ctas
 create table high_salary as 
 select * from employees
 where salary >60000;
@@ -55,7 +55,7 @@ select * from high_salary;
 
 show tables;
 
-#cte - comman table expression
+#									cte - comman table expression
 with salary2 as 
 (select * from employees
 where salary >60000)
@@ -63,7 +63,7 @@ select * from salary2;
 
 select * from salary2;
 
-#tempapory table
+#									tempapory table
 create temporary table salary3 as
 select * from employees
 where salary >60000;
@@ -71,7 +71,7 @@ where salary >60000;
 select * from salary3;
 use morning_class;
 
-#and, or, not
+-- 									and, or, not
 
 select * from student;
 
@@ -98,7 +98,7 @@ order by salary desc
 limit 1 offset 2;
 
 #							SQL FUNCTIONS
-#		STRING FUNCTION:
+#				STRING FUNCTION:
 
 
 #What is sql function?
@@ -144,7 +144,7 @@ select substring_index('aaple,banana,cherry',',',-1);
 # searching text,combining columns(first_name and last_name).
 
 
-#		TIME & DATE FUNCTIONS:
+#					TIME & DATE FUNCTIONS:
 
 # Date time function():
 # 		SQL provides many built-in date and time functions to handle 
@@ -182,7 +182,7 @@ select dayname('2026-04-27'+interval 10 day);
 select CAST('2026-03-21' AS DATE);
 
 
-# 		MATH FUNCTION:
+# 						MATH FUNCTION:
 
 select abs(-100);
 
@@ -237,7 +237,8 @@ select coalesce(commission, 0) from employees;
 
 
 
-#					JOINs
+#						JOINs
+
 # WHAT IS JOINs?
 #		JOINs are used to combine data from two or more tables based on a related 
 # column (usually a key).
@@ -318,6 +319,8 @@ FROM employee_s e
 RIGHT JOIN dept_ment d
 ON e.dept_id = d.dept_id;
 
+
+
 # 						SUB QUERY
 #		 A Subquery is a query nested inside another query
 # (inside SELECT, FROM, WHERE).
@@ -329,7 +332,7 @@ ON e.dept_id = d.dept_id;
 -- Correlated subquery →  depends on outer query (runs repeatedly)
 
 
-# 1.Subquery in SELECT Clause
+# 1.Subquery in SELECT Clause							# using SELECT
 # Display employee name with department average salary:
 
 SELECT emp_name,
@@ -339,7 +342,7 @@ SELECT emp_name,
 FROM Employees e1;
 
 
-# 2.Subquery in FROM Clause (Derived Table)
+# 2.Subquery in FROM Clause (Derived Table)				# using FROM
 # Find average salary of each department:
 
 SELECT dept_id, avg_salary
@@ -350,7 +353,7 @@ FROM (
 ) AS dept_avg;
 
 
-#3. Single-Row Subquery (in WHERE)
+#3. Single-Row Subquery (in WHERE)					    # using WHERE
 #Find employees earning more than the average salary:
 
 SELECT emp_name, salary
@@ -361,7 +364,7 @@ WHERE salary > (
 );
 
 
-# 4.Subquery with IN (Multiple Rows)
+# 4.Subquery with IN (Multiple Rows)					# using IN
 #Find employees working in departments located in 'Chennai':
 
 SELECT emp_name
@@ -373,7 +376,7 @@ WHERE dept_id IN (
 );
 
 
-# 5.Subquery with ANY
+# 5.Subquery with ANY									# using ANY
 # Find employees earning more than any employee in department 10:
 
 SELECT emp_name
@@ -385,7 +388,7 @@ WHERE salary > ANY (
 );
 
 
-# 6.Subquery with ALL
+# 6.Subquery with ALL									# using ALL
 #Find employees earning more than all employees in department 10:
 
 SELECT emp_name
@@ -397,7 +400,7 @@ WHERE salary > ALL (
 );
 
 
-# 7.Subquery with EXISTS
+# 7.Subquery with EXISTS								# using EXISTS
 # Find employees who have at least one record in the Projects table:
 
 SELECT emp_name
@@ -409,7 +412,7 @@ WHERE EXISTS (
 );
 
 
-# 8.Correlated Subquery
+# 8.Correlated Subquery			# depends on outer query		(WINDOWS FUNCTION)
 # Find employees earning more than their department average:
 
 SELECT emp_name, salary
@@ -419,3 +422,34 @@ WHERE salary > (
     FROM Employees e2
     WHERE e1.dept_id = e2.dept_id
 );
+
+
+#							Filtering & Conditions
+#	Used to narrow down data:
+
+-- AND, OR, NOT
+-- IN, BETWEEN, LIKE
+-- IS NULL, IS NOT NULL
+
+#															(WINDOWS FUNCTION)
+
+#						Case Statements (Conditional Logic)
+#   Used like IF-ELSE:
+
+SELECT emp_name,
+CASE 
+  WHEN salary > 50000 THEN 'High'
+  ELSE 'Low'
+END AS salary_category
+FROM Employees;
+
+
+#						CTE (Common Table Expressions)
+#    Makes complex queries readable:
+
+WITH avg_salary AS (
+    SELECT dept_id, AVG(salary) AS avg_sal
+    FROM Employees
+    GROUP BY dept_id
+)
+SELECT * FROM avg_salary;
